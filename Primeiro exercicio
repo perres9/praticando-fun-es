@@ -5,26 +5,24 @@ n = int(input().strip())
 pacientes = []
 
 # Loop para entrada de dados
-for _ in range(n):
+for i in range(n):
     nome, idade, status = input().strip().split(", ")
     idade = int(idade)
-    pacientes.append((nome, idade, status))
+    pacientes.append((nome, idade, status.lower(), i))  # inclui índice de chegada
 
-# Função de prioridade
+# Ordenar por prioridade: urgente > idosos > demais
 def prioridade(paciente):
-    nome, idade, status = paciente
-    if status.lower() == "urgente":
-        return (0,)
+    nome, idade, status, ordem_chegada = paciente
+    if status == "urgente":
+        return (0, -idade)
     elif idade >= 60:
-        return (1,)
+        return (1, -idade)
     else:
-        return (2,)
+        return (2, ordem_chegada)
 
-# Ordena os pacientes com base na prioridade
 pacientes_ordenados = sorted(pacientes, key=prioridade)
 
-# Extrai apenas os nomes para exibição
-nomes_ordenados = [paciente[0] for paciente in pacientes_ordenados]
+# Exibir a ordem de atendimento com título e vírgulas
+nomes = [paciente[0] for paciente in pacientes_ordenados]
+print("Ordem de Atendimento: " + ", ".join(nomes))
 
-# Exibe o resultado final
-print("Ordem de Atendimento: " + ", ".join(nomes_ordenados))
